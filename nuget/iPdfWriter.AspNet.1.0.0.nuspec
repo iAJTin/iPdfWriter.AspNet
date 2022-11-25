@@ -6,10 +6,11 @@
 		<title>iPdfWriter.AspNet</title>
 		<authors>iAJTin</authors>
 		<owners>iAJTin</owners>
+    <readme>.\README.md</readme>
 		<license type="expression">AGPL-3.0-only</license>
 		<projectUrl>https://github.com/iAJTin/iPdfWriter.AspNet</projectUrl>
 		<icon>.\iPdfWriter.AspNet.png</icon>
-		<iconUrl>https://raw.githubusercontent.com/iAJTin/iPdfWriter/master/nuget/iPdfWriter.AspNet.png</iconUrl>
+		<iconUrl>https://raw.githubusercontent.com/iAJTin/iPdfWriter.AspNet/master/nuget/iPdfWriter.AspNet.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>
       iPdfWriter.AspNet, extends iPdfWriter to work in AspNet (FullFramework) projects, contains extension methods to download PdfInput instances
@@ -20,8 +21,9 @@
 		<repository type="git" url="https://github.com/iAJTin/iPdfWriter.AspNet"/>
 	</metadata>
 	<files>
-		<file src="..\README.txt" target="." />
-		<file src=".\iPdfWriter.AspNet.png" target="." />
+    <file src=".\README.md" target="." />
+    <file src="..\README.txt" target="." />
+    <file src=".\iPdfWriter.AspNet.png" target="." />
 		<file src="..\src\lib\iTin.Utilities\iTin.Utilities.Pdf\iTin.Utilities.Pdf.Writer\iTin.Utilities.Pdf.Writer.AspNet\bin\Debug\**" target="lib" exclude="**\*.deps.json;**\*.pdb;" />
 	</files>
 </package>
