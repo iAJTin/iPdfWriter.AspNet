@@ -14,7 +14,7 @@ Changes in this version (v1.0.0)
     •———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————•
     | Library                                           Version   Description                                                           |
     •———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————•
-    | iTin.AspNet                                       1.0.0.0   Base class library for AspNet fullframework environment               |
+    | iTin.AspNet                                       1.0.0.0   Base class library for booth AspNet & AspNetCore environments         |
     •———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————•
     | iTin.AspNet.Web                                   1.0.0.0   AspNet class library containing various extensions, helpers           |
     •———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————•
@@ -24,7 +24,7 @@ Changes in this version (v1.0.0)
     •———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————•
     | iTin.Utilities.Abstractions.Writer                1.0.0.0   Generic Common Writer's Abstractions                                  |
     •———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————•
-    | iTin.Utilities.Pdf.Writer.AspNet                  1.0.0.0   iPdfWriter AspNet class library containing PdfInput, OutputResult     |
+    | iTin.Utilities.Pdf.Writer.AspNet                  1.0.0.0   iPdfWriter AspNet class library containing PdfInput and OutputResult  |
     |                                                             extensions                                                            |
     •———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————•
 

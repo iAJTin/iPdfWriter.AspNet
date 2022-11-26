@@ -11,7 +11,7 @@
     <Authors>iTin</Authors>
     <Company>iTin</Company>
     <Product>iTin.Utilities.Pdf.Writer.AspNet</Product>
-    <Description>Contains pdf writer extensions for AspNet</Description>
+    <Description>iPdfWriter AspNet class library containing PdfInput, OutputResult extensions</Description>
     <Copyright>Copyright © 2022</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <LangVersion>latest</LangVersion>
