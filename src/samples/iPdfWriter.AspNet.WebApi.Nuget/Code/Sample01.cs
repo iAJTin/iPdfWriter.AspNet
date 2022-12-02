@@ -5,12 +5,11 @@ using System.Threading.Tasks;
 
 using iTin.Core.Models.Design.Enums;
 
-using iTin.Utilities.Abstractions.Writer.Operations.Results;
-
 using iTin.Utilities.Pdf.Design.Image;
-using iTin.Utilities.Pdf.Writer;
-using iTin.Utilities.Pdf.Writer.Operations.Replace;
-using iTin.Utilities.Pdf.Writer.Operations.Replace.Replacement.Text;
+
+using iPdfWriter.Abstractions.Writer.Operations.Results;
+using iPdfWriter.Operations.Replace;
+using iPdfWriter.Operations.Replace.Replacement.Text;
 
 namespace iPdfWriter.AspNet.WebApi.Nuget.Code
 {

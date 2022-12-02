@@ -5,11 +5,11 @@ using System.Web;
 
 using iTin.Core.ComponentModel;
 
-using iTin.Utilities.Abstractions.Writer.Input;
-using iTin.Utilities.Abstractions.Writer.Operations.Results;
-
-namespace iTin.Utilities.Pdf.Writer
+namespace iPdfWriter.Abstractions.Writer
 {
+    using Input;
+    using Operations.Results;
+
     /// <summary>
     /// Static class than contains extension methods for <see cref="IInput"/> objects.
     /// </summary>

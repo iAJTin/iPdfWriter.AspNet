@@ -3,6 +3,6 @@ CLS
 
 rmdir ..\documentation /s /q
 
-xmldocmd ..\src\lib\iTin.Utilities\iTin.Utilities.Pdf\iTin.Utilities.Pdf.Writer\iTin.Utilities.Pdf.Writer.AspNet\bin\Debug\net461\iTin.Utilities.Pdf.Writer.AspNet.dll ..\documentation
+xmldocmd ..\src\lib\iPdfWriter\iPdfWriter.AspNet\bin\Debug\net461\iPdfWriter.AspNet.dll ..\documentation
          
 PAUSE

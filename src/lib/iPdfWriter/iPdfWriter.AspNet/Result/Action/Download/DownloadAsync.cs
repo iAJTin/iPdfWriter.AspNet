@@ -3,6 +3,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 
 using iTin.AspNet.Web;
@@ -11,17 +13,16 @@ using iTin.AspNet.Web.ComponentModel;
 using iTin.Core.ComponentModel;
 using iTin.Core.ComponentModel.Results;
 
-using iTin.Utilities.Abstractions.Writer.Operations.Actions;
-using iTin.Utilities.Abstractions.Writer.Operations.Results;
+using iPdfWriter.Abstractions.Writer.Operations.Results;
 
-namespace iTin.Utilities.Pdf.Writer.Operations.Result.Actions
+namespace iPdfWriter.Abstractions.Writer.Operations.Actions
 {
     /// <inheritdoc/>
     /// <summary>
     /// Specialization of <see cref="IOutputAction"/> interface that downloads the file.
     /// </summary>
     /// <seealso cref="IOutputAction"/>
-    public class Download : IOutputAction
+    public class DownloadAsync : IOutputActionAsync
     {
         #region private constants
 
@@ -35,15 +36,15 @@ namespace iTin.Utilities.Pdf.Writer.Operations.Result.Actions
 
         #region interfaces
 
-        #region IOutputAction
+        #region IOutputActionAsync
 
-        #region public methods   
+        #region public async methods   
 
-        /// <inheritdoc />
         /// <summary>
-        /// Execute action for specified output result data.
+        /// Execute action asynchronously for specified output result.
         /// </summary>
         /// <param name="context">Target output result data.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>
         /// <para>
         /// A <see cref="BooleanResult"/> which implements the <see cref="IResult"/> interface reference that contains the result of the operation, to check if the operation is correct, the <b>Success</b>
@@ -54,7 +55,8 @@ namespace iTin.Utilities.Pdf.Writer.Operations.Result.Actions
         /// The type of the return value is <see cref="bool"/>, which contains the operation result
         /// </para>
         /// </returns>
-        public IResult Execute(IOutputResultData context) => ExecuteImpl(context);
+        public async Task<IResult> ExecuteAsync(IOutputResultData context, CancellationToken cancellationToken = default) => 
+            await ExecuteImplAsync(context, cancellationToken);
 
         #endregion
 
@@ -73,18 +75,18 @@ namespace iTin.Utilities.Pdf.Writer.Operations.Result.Actions
         public HttpContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the filename.
+        /// Gets or sets the filename output path. The use of the <b>~</b> character is allowed to indicate relative paths, and you can also use <b>UNC</b> path.
         /// </summary>
         /// <value>
-        /// The filename.
+        /// The output path.
         /// </value>
         public string Filename { get; set; }
 
         #endregion
 
-        #region private methods   
+        #region private async methods   
 
-        private IResult ExecuteImpl(IOutputResultData data)
+        private async Task<IResult> ExecuteImplAsync(IOutputResultData data, CancellationToken cancellationToken = default)
         {
             if (data == null)
             {
@@ -113,11 +115,11 @@ namespace iTin.Utilities.Pdf.Writer.Operations.Result.Actions
                     safeFilename = GetUniqueTempRandomFile().Segments.Last();
                 }
 
-                var downloadFilename = data.IsZipped
-                    ? Path.ChangeExtension(safeFilename, ZipExtension)
+                var downloadFilename = data.IsZipped 
+                    ? Path.ChangeExtension(safeFilename, ZipExtension) 
                     : Path.ChangeExtension(safeFilename, PdfExtension);
 
-                data.GetOutputStream().Download(downloadFilename, safeContext.Response);
+                await (await data.GetOutputStreamAsync(cancellationToken)).DownloadAsync(downloadFilename, safeContext.Response, cancellationToken);
 
                 return BooleanResult.SuccessResult;
             }

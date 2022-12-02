@@ -5,9 +5,9 @@ using System.Web;
 
 using iTin.Core.ComponentModel;
 
-using iTin.Utilities.Pdf.Writer.Operations.Result.Actions;
+using iPdfWriter.Abstractions.Writer.Operations.Actions;
 
-namespace iTin.Utilities.Abstractions.Writer.Operations.Results
+namespace iPdfWriter.Abstractions.Writer.Operations.Results
 {
     /// <summary>
     /// Static class than contains extension methods for <see cref="OutputResult"/>.

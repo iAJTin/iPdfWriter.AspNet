@@ -1,6 +1,6 @@
 # What is iPdfWriter.AspNet?
 
-**iPdfWriter.AspNet**, extends [iPdfWriter] to work in **AspNet (FullFramework)** projects, contains extension methods to download **PdfInput** instances as well as **OutputResult**, facilitating its use in this environment.
+**iPdfWriter.AspNet**, extends [iPdfWriter](https://github.com/iAJTin/iPdfWriter) to work in **AspNet (FullFramework)** projects, contains extension methods to download **PdfInput** instances as well as **OutputResult**, facilitating its use in this environment.
 
 I hope it helps someone. :smirk:
 
@@ -44,5 +44,3 @@ public class AdobeReportAsyncController : ApiController
     }
 }
 ```
-
-[iPdfWriter]: https://github.com/iAJTin/iPdfWriter

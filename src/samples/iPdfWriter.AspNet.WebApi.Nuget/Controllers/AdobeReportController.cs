@@ -1,7 +1,7 @@
 ﻿
 using System.Web.Http;
 
-using iTin.Utilities.Abstractions.Writer.Operations.Results;
+using iPdfWriter.Abstractions.Writer.Operations.Results;
 
 namespace iPdfWriter.AspNet.WebApi.Nuget.Controllers
 {
