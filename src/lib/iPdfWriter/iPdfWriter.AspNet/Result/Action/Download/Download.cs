@@ -13,133 +13,131 @@ using iTin.Core.ComponentModel.Results;
 
 using iPdfWriter.Abstractions.Writer.Operations.Results;
 
-namespace iPdfWriter.Abstractions.Writer.Operations.Actions
+namespace iPdfWriter.Abstractions.Writer.Operations.Actions;
+
+/// <summary>
+/// Specialization of <see cref="IOutputAction"/> interface that downloads the file.
+/// </summary>
+/// <seealso cref="IOutputAction"/>
+public class Download : IOutputAction
 {
-    /// <inheritdoc/>
+    #region private constants
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private const string PdfExtension = "pdf";
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private const string ZipExtension = "zip";
+
+    #endregion
+
+    #region interfaces
+
+    #region IOutputAction
+
+    #region public methods   
+
+    /// <inheritdoc />
     /// <summary>
-    /// Specialization of <see cref="IOutputAction"/> interface that downloads the file.
+    /// Execute action for specified output result data.
     /// </summary>
-    /// <seealso cref="IOutputAction"/>
-    public class Download : IOutputAction
+    /// <param name="context">Target output result data.</param>
+    /// <returns>
+    /// <para>
+    /// A <see cref="BooleanResult"/> which implements the <see cref="IResult"/> interface reference that contains the result of the operation, to check if the operation is correct, the <b>Success</b>
+    /// property will be <b>true</b> and the <b>Value</b> property will contain the value; Otherwise, the the <b>Success</b> property
+    /// will be false and the <b>Errors</b> property will contain the errors associated with the operation, if they have been filled in.
+    /// </para>
+    /// <para>
+    /// The type of the return value is <see cref="bool"/>, which contains the operation result
+    /// </para>
+    /// </returns>
+    public IResult Execute(IOutputResultData context) => ExecuteImpl(context);
+
+    #endregion
+
+    #endregion
+
+    #endregion
+
+    #region public properties   
+
+    /// <summary>
+    /// Gets or sets the current http context.
+    /// </summary>
+    /// <value>
+    /// The current http context.
+    /// </value>
+    public HttpContext Context { get; set; }
+
+    /// <summary>
+    /// Gets or sets the filename.
+    /// </summary>
+    /// <value>
+    /// The filename.
+    /// </value>
+    public string Filename { get; set; }
+
+    #endregion
+
+    #region private methods   
+
+    private IResult ExecuteImpl(IOutputResultData data)
     {
-        #region private constants
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private const string PdfExtension = "pdf";
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private const string ZipExtension = "zip";
-
-        #endregion
-
-        #region interfaces
-
-        #region IOutputAction
-
-        #region public methods   
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Execute action for specified output result data.
-        /// </summary>
-        /// <param name="context">Target output result data.</param>
-        /// <returns>
-        /// <para>
-        /// A <see cref="BooleanResult"/> which implements the <see cref="IResult"/> interface reference that contains the result of the operation, to check if the operation is correct, the <b>Success</b>
-        /// property will be <b>true</b> and the <b>Value</b> property will contain the value; Otherwise, the the <b>Success</b> property
-        /// will be false and the <b>Errors</b> property will contain the errors associated with the operation, if they have been filled in.
-        /// </para>
-        /// <para>
-        /// The type of the return value is <see cref="bool"/>, which contains the operation result
-        /// </para>
-        /// </returns>
-        public IResult Execute(IOutputResultData context) => ExecuteImpl(context);
-
-        #endregion
-
-        #endregion
-
-        #endregion
-
-        #region public properties   
-
-        /// <summary>
-        /// Gets or sets the current http context.
-        /// </summary>
-        /// <value>
-        /// The current http context.
-        /// </value>
-        public HttpContext Context { get; set; }
-
-        /// <summary>
-        /// Gets or sets the filename.
-        /// </summary>
-        /// <value>
-        /// The filename.
-        /// </value>
-        public string Filename { get; set; }
-
-        #endregion
-
-        #region private methods   
-
-        private IResult ExecuteImpl(IOutputResultData data)
+        if (data == null)
         {
-            if (data == null)
+            return BooleanResult.NullResult;
+        }
+
+        var safeContext = Context;
+        if (Context == null)
+        {
+            var detector = new AspDetector();
+            if (detector.AspIsRunning)
             {
-                return BooleanResult.NullResult;
+                safeContext = (HttpContext)HttpContextAccessor.Current;
             }
-
-            var safeContext = Context;
-            if (Context == null)
+            else
             {
-                var detector = new AspDetector();
-                if (detector.AspIsRunning)
-                {
-                    safeContext = (HttpContext)HttpContextAccessor.Current;
-                }
-                else
-                {
-                    return BooleanResult.ErrorResult;
-                }
-            }
-
-            try
-            {
-                var safeFilename = Filename;
-                if (string.IsNullOrEmpty(Filename))
-                {
-                    safeFilename = GetUniqueTempRandomFile().Segments.Last();
-                }
-
-                var downloadFilename = data.IsZipped
-                    ? Path.ChangeExtension(safeFilename, ZipExtension)
-                    : Path.ChangeExtension(safeFilename, PdfExtension);
-
-                data.GetOutputStream().Download(downloadFilename, safeContext.Response);
-
-                return BooleanResult.SuccessResult;
-            }
-            catch (Exception ex)
-            {
-                return BooleanResult.FromException(ex);
+                return BooleanResult.ErrorResult;
             }
         }
 
-        #endregion
-
-        #region private static methods   
-
-        private static Uri GetUniqueTempRandomFile()
+        try
         {
+            var safeFilename = Filename;
+            if (string.IsNullOrEmpty(Filename))
+            {
+                safeFilename = GetUniqueTempRandomFile().Segments.Last();
+            }
 
-            var tempPath = Path.GetTempPath();
-            var randomFileName = Path.GetRandomFileName();
-            var path = Path.Combine(tempPath, randomFileName);
+            var downloadFilename = data.IsZipped
+                ? Path.ChangeExtension(safeFilename, ZipExtension)
+                : Path.ChangeExtension(safeFilename, PdfExtension);
 
-            return new Uri(path);
+            data.GetOutputStream().Download(downloadFilename, safeContext.Response);
+
+            return BooleanResult.SuccessResult;
         }
-
-        #endregion
+        catch (Exception ex)
+        {
+            return BooleanResult.FromException(ex);
+        }
     }
+
+    #endregion
+
+    #region private static methods   
+
+    private static Uri GetUniqueTempRandomFile()
+    {
+
+        var tempPath = Path.GetTempPath();
+        var randomFileName = Path.GetRandomFileName();
+        var path = Path.Combine(tempPath, randomFileName);
+
+        return new Uri(path);
+    }
+
+    #endregion
 }

@@ -23,11 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="iPdfWriter.Abstractions" Version="1.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\iTin\iTin.AspNet\iTin.AspNet.Web\iTin.AspNet.Web.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\iTin\iTin.AspNet\iTin.AspNet.Web\src\iTin.AspNet.Web.csproj" />
+    <ProjectReference Include="..\..\..\..\..\iPdfWriter.Abstractions\src\lib\iPdfWriter\iPdfWriter.Abstractions.Writer\iPdfWriter.Abstractions.Writer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

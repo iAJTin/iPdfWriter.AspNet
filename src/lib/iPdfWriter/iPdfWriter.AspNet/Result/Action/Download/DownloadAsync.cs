@@ -15,134 +15,132 @@ using iTin.Core.ComponentModel.Results;
 
 using iPdfWriter.Abstractions.Writer.Operations.Results;
 
-namespace iPdfWriter.Abstractions.Writer.Operations.Actions
+namespace iPdfWriter.Abstractions.Writer.Operations.Actions;
+
+/// <summary>
+/// Specialization of <see cref="IOutputAction"/> interface that downloads the file.
+/// </summary>
+/// <seealso cref="IOutputAction"/>
+public class DownloadAsync : IOutputActionAsync
 {
-    /// <inheritdoc/>
+    #region private constants
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private const string PdfExtension = "pdf";
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private const string ZipExtension = "zip";
+
+    #endregion
+
+    #region interfaces
+
+    #region IOutputActionAsync
+
+    #region public async methods   
+
     /// <summary>
-    /// Specialization of <see cref="IOutputAction"/> interface that downloads the file.
+    /// Execute action asynchronously for specified output result.
     /// </summary>
-    /// <seealso cref="IOutputAction"/>
-    public class DownloadAsync : IOutputActionAsync
+    /// <param name="context">Target output result data.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+    /// <returns>
+    /// <para>
+    /// A <see cref="BooleanResult"/> which implements the <see cref="IResult"/> interface reference that contains the result of the operation, to check if the operation is correct, the <b>Success</b>
+    /// property will be <b>true</b> and the <b>Value</b> property will contain the value; Otherwise, the the <b>Success</b> property
+    /// will be false and the <b>Errors</b> property will contain the errors associated with the operation, if they have been filled in.
+    /// </para>
+    /// <para>
+    /// The type of the return value is <see cref="bool"/>, which contains the operation result
+    /// </para>
+    /// </returns>
+    public async Task<IResult> ExecuteAsync(IOutputResultData context, CancellationToken cancellationToken = default) => 
+        await ExecuteImplAsync(context, cancellationToken);
+
+    #endregion
+
+    #endregion
+
+    #endregion
+
+    #region public properties   
+
+    /// <summary>
+    /// Gets or sets the current http context.
+    /// </summary>
+    /// <value>
+    /// The current http context.
+    /// </value>
+    public HttpContext Context { get; set; }
+
+    /// <summary>
+    /// Gets or sets the filename output path. The use of the <b>~</b> character is allowed to indicate relative paths, and you can also use <b>UNC</b> path.
+    /// </summary>
+    /// <value>
+    /// The output path.
+    /// </value>
+    public string Filename { get; set; }
+
+    #endregion
+
+    #region private async methods   
+
+    private async Task<IResult> ExecuteImplAsync(IOutputResultData data, CancellationToken cancellationToken = default)
     {
-        #region private constants
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private const string PdfExtension = "pdf";
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private const string ZipExtension = "zip";
-
-        #endregion
-
-        #region interfaces
-
-        #region IOutputActionAsync
-
-        #region public async methods   
-
-        /// <summary>
-        /// Execute action asynchronously for specified output result.
-        /// </summary>
-        /// <param name="context">Target output result data.</param>
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>
-        /// <para>
-        /// A <see cref="BooleanResult"/> which implements the <see cref="IResult"/> interface reference that contains the result of the operation, to check if the operation is correct, the <b>Success</b>
-        /// property will be <b>true</b> and the <b>Value</b> property will contain the value; Otherwise, the the <b>Success</b> property
-        /// will be false and the <b>Errors</b> property will contain the errors associated with the operation, if they have been filled in.
-        /// </para>
-        /// <para>
-        /// The type of the return value is <see cref="bool"/>, which contains the operation result
-        /// </para>
-        /// </returns>
-        public async Task<IResult> ExecuteAsync(IOutputResultData context, CancellationToken cancellationToken = default) => 
-            await ExecuteImplAsync(context, cancellationToken);
-
-        #endregion
-
-        #endregion
-
-        #endregion
-
-        #region public properties   
-
-        /// <summary>
-        /// Gets or sets the current http context.
-        /// </summary>
-        /// <value>
-        /// The current http context.
-        /// </value>
-        public HttpContext Context { get; set; }
-
-        /// <summary>
-        /// Gets or sets the filename output path. The use of the <b>~</b> character is allowed to indicate relative paths, and you can also use <b>UNC</b> path.
-        /// </summary>
-        /// <value>
-        /// The output path.
-        /// </value>
-        public string Filename { get; set; }
-
-        #endregion
-
-        #region private async methods   
-
-        private async Task<IResult> ExecuteImplAsync(IOutputResultData data, CancellationToken cancellationToken = default)
+        if (data == null)
         {
-            if (data == null)
+            return BooleanResult.NullResult;
+        }
+
+        var safeContext = Context;
+        if (Context == null)
+        {
+            var detector = new AspDetector();
+            if (detector.AspIsRunning)
             {
-                return BooleanResult.NullResult;
+                safeContext = (HttpContext)HttpContextAccessor.Current;
             }
-
-            var safeContext = Context;
-            if (Context == null)
+            else
             {
-                var detector = new AspDetector();
-                if (detector.AspIsRunning)
-                {
-                    safeContext = (HttpContext)HttpContextAccessor.Current;
-                }
-                else
-                {
-                    return BooleanResult.ErrorResult;
-                }
-            }
-
-            try
-            {
-                var safeFilename = Filename;
-                if (string.IsNullOrEmpty(Filename))
-                {
-                    safeFilename = GetUniqueTempRandomFile().Segments.Last();
-                }
-
-                var downloadFilename = data.IsZipped 
-                    ? Path.ChangeExtension(safeFilename, ZipExtension) 
-                    : Path.ChangeExtension(safeFilename, PdfExtension);
-
-                await (await data.GetOutputStreamAsync(cancellationToken)).DownloadAsync(downloadFilename, safeContext.Response, cancellationToken);
-
-                return BooleanResult.SuccessResult;
-            }
-            catch (Exception ex)
-            {
-                return BooleanResult.FromException(ex);
+                return BooleanResult.ErrorResult;
             }
         }
 
-        #endregion
-
-        #region private static methods   
-
-        private static Uri GetUniqueTempRandomFile()
+        try
         {
+            var safeFilename = Filename;
+            if (string.IsNullOrEmpty(Filename))
+            {
+                safeFilename = GetUniqueTempRandomFile().Segments.Last();
+            }
 
-            var tempPath = Path.GetTempPath();
-            var randomFileName = Path.GetRandomFileName();
-            var path = Path.Combine(tempPath, randomFileName);
+            var downloadFilename = data.IsZipped 
+                ? Path.ChangeExtension(safeFilename, ZipExtension) 
+                : Path.ChangeExtension(safeFilename, PdfExtension);
 
-            return new Uri(path);
+            await (await data.GetOutputStreamAsync(cancellationToken)).DownloadAsync(downloadFilename, safeContext.Response, cancellationToken);
+
+            return BooleanResult.SuccessResult;
         }
-
-        #endregion
+        catch (Exception ex)
+        {
+            return BooleanResult.FromException(ex);
+        }
     }
+
+    #endregion
+
+    #region private static methods   
+
+    private static Uri GetUniqueTempRandomFile()
+    {
+
+        var tempPath = Path.GetTempPath();
+        var randomFileName = Path.GetRandomFileName();
+        var path = Path.Combine(tempPath, randomFileName);
+
+        return new Uri(path);
+    }
+
+    #endregion
 }
