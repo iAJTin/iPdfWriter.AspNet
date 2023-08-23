@@ -6,13 +6,13 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-  - Now uses [![nuget package](./assets/nuget_24x24.png)](https://www.nuget.org/packages/iPdfWriter.Abstractions) [iPdfWriter.Abstractions](https://github.com/iAJTin/iPdfWriter.Abstractions).
+  - Create project and first commit
 
-### Removed
-  
-   | Library | Version | Description |
-   |:------|:------|:----------|
-   | iTin.Utilities.Abstractions.Writer | 1.0.0.0 | Generic Common Writer's Abstractions |
+  - Multiple Repository is used.
+
+    In the image, I show my folder structure, in case it helps someone
+
+    ![multi-repo.png][mutli-repo] 
 
 ## [1.0.0] - 2022-11-25
 
@@ -33,3 +33,4 @@ All notable changes to this project will be documented in this file.
 
 [1.0.1]: https://github.com/iAJTin/iPdfWriter.AspNet/releases/tag/v1.0.1
 [1.0.0]: https://github.com/iAJTin/iPdfWriter.AspNet/releases/tag/v1.0.0
+[mutli-repo]: ./assets/multi-repo.png "folder structure"
