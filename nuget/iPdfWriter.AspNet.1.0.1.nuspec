@@ -40,6 +40,6 @@
     <file src=".\README.md" target="." />
     <file src="..\README.txt" target="." />
     <file src=".\iPdfWriter.AspNet.png" target="." />
-		<file src="..\src\lib\iPdfWriter\iPdfWriter.AspNet\bin\Debug\**" target="lib" exclude="**\*.deps.json;**\*.pdb;" />
+		<file src="..\src\lib\bin\Debug\**" target="lib" exclude="**\*.deps.json;**\*.pdb;" />
 	</files>
 </package>

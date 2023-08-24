@@ -1,24 +1,24 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 
-namespace iPdfWriter.AspNet.WebApi
+namespace iPdfWriter.AspNet.WebApi;
+
+public static class WebApiConfig
 {
-    public static class WebApiConfig
+    public static void Register(HttpConfiguration config)
     {
-        public static void Register(HttpConfiguration config)
-        {
-            // Configuración y servicios de Web API
+        // Configuración y servicios de Web API
 
-            // Rutas de Web API
-            config.MapHttpAttributeRoutes();
+        // Rutas de Web API
+        config.MapHttpAttributeRoutes();
 
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
-        }
+        config.Routes.MapHttpRoute(
+            name: "DefaultApi",
+            routeTemplate: "api/{controller}/{id}",
+            defaults: new { id = RouteParameter.Optional }
+        );
     }
 }

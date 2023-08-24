@@ -23,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\iTin\iTin.AspNet\iTin.AspNet.Web\src\iTin.AspNet.Web.csproj" />
-    <ProjectReference Include="..\..\..\..\..\iPdfWriter.Abstractions\src\lib\iPdfWriter\iPdfWriter.Abstractions.Writer\iPdfWriter.Abstractions.Writer.csproj" />
+    <ProjectReference Include="..\..\..\..\iTin\iTin.AspNet\iTin.AspNet.Web\src\iTin.AspNet.Web.csproj" />
+    <ProjectReference Include="..\..\..\iPdfWriter.Abstractions\src\lib\iPdfWriter\iPdfWriter.Abstractions.Writer\iPdfWriter.Abstractions.Writer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
